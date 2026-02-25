@@ -50,6 +50,14 @@ When generating "next 7 days" digests from Discord scheduled events:
 
 This avoids day-shift bugs caused by UTC timestamps + recurrence interpretation.
 
+## Gmail Safety Rule (Mr_Anderson)
+
+For `work-gmail` MCP access:
+
+- **Never run modify/send/delete/trash/label-changing actions without explicit per-action approval from Mr_Anderson.**
+- Read/search/summarize is allowed by default.
+- If a requested action could change mailbox state, ask first and wait for explicit confirmation.
+
 ---
 
 Add whatever helps you do your job. This is your cheat sheet.
