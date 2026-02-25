@@ -58,6 +58,13 @@ For `work-gmail` MCP access:
 - Read/search/summarize is allowed by default.
 - If a requested action could change mailbox state, ask first and wait for explicit confirmation.
 
+## Store Discord Summary Scope Rule
+
+For customer-chatter summaries in Forge server (`1278178261037486181`):
+
+- **Exclude `#retail-chat` (`1336357842218651711`) from source analysis.**
+- `#retail-chat` is a destination channel for summaries, not an input source.
+
 ---
 
 Add whatever helps you do your job. This is your cheat sheet.
