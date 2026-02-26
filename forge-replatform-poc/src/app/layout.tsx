@@ -22,12 +22,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/90 backdrop-blur">
+        <header className="sticky top-0 z-10 border-b border-slate-200/80 bg-white/90 backdrop-blur">
           <nav className="mx-auto flex max-w-5xl items-center gap-4 px-4 py-3 text-sm sm:px-6">
-            <Link href="/" className="font-semibold">Forge POC</Link>
-            <Link href="/events" className="text-zinc-600 hover:text-zinc-900">Events</Link>
-            <Link href="/categories/mtg" className="text-zinc-600 hover:text-zinc-900">Categories</Link>
-            <Link href="/new-player" className="text-zinc-600 hover:text-zinc-900">New Player</Link>
+            <Link href="/" className="font-bold text-slate-900">The Forge • POC</Link>
+            <Link href="/events" className="text-slate-600 hover:text-slate-900">Events</Link>
+            <Link href="/categories/mtg" className="text-slate-600 hover:text-slate-900">Categories</Link>
+            <Link href="/new-player" className="text-slate-600 hover:text-slate-900">New Player</Link>
           </nav>
         </header>
         {children}
