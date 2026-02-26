@@ -1,45 +1,32 @@
-'use client';
-
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
-import { featuredProducts, gameCategories, weekEvents, type GameCategory } from '@/lib/mock-data';
+import { featuredProducts, gameCategories, weekEvents } from '@/lib/mock-data';
+import { getShopifyFeaturedProducts, getShopifyProductUrl } from '@/lib/shopify';
 
-export function HomeExperience() {
-  const [enabled, setEnabled] = useState<GameCategory[]>([...gameCategories]);
+export async function HomeExperience() {
+  const shopifyProducts = await getShopifyFeaturedProducts(4);
+  const products = shopifyProducts.length
+    ? shopifyProducts.map((p) => ({
+        id: p.id,
+        title: p.title,
+        price: `$${p.price}`,
+        badge: 'New In Stock' as const,
+        category: 'Store' as const,
+        url: getShopifyProductUrl(p.handle),
+      }))
+    : featuredProducts.slice(0, 4).map((p) => ({ ...p, url: '/categories/mtg' }));
 
-  const filteredProducts = useMemo(
-    () => featuredProducts.filter((p) => enabled.includes(p.category)).slice(0, 4),
-    [enabled],
-  );
-
-  const filteredEvents = useMemo(
-    () => weekEvents.filter((e) => enabled.includes(e.category)).slice(0, 3),
-    [enabled],
-  );
-
-  const toggle = (cat: GameCategory) => {
-    setEnabled((curr) => (curr.includes(cat) ? curr.filter((c) => c !== cat) : [...curr, cat]));
-  };
+  const filteredEvents = weekEvents.slice(0, 3);
 
   return (
     <>
       <section className="mb-5">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Customize your feed</p>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Game interests</p>
         <div className="flex flex-wrap gap-2">
-          {gameCategories.map((cat) => {
-            const active = enabled.includes(cat);
-            return (
-              <button
-                key={cat}
-                onClick={() => toggle(cat)}
-                className={`rounded-full border px-3 py-1.5 text-sm font-semibold ${
-                  active ? 'border-orange-600 bg-orange-100 text-orange-800' : 'border-slate-200 bg-white text-slate-600'
-                }`}
-              >
-                {cat}
-              </button>
-            );
-          })}
+          {gameCategories.map((cat) => (
+            <span key={cat} className="rounded-full border border-orange-600 bg-orange-100 px-3 py-1.5 text-sm font-semibold text-orange-800">
+              {cat}
+            </span>
+          ))}
         </div>
       </section>
 
@@ -62,10 +49,12 @@ export function HomeExperience() {
           <Link href="/categories/mtg" className="text-sm font-semibold text-orange-600 hover:text-orange-700">Browse game categories →</Link>
         </div>
         <ul className="space-y-2">
-          {filteredProducts.map((p) => (
+          {products.map((p) => (
             <li key={p.id} className="flex items-center justify-between rounded-lg border border-slate-100 p-3 text-sm">
               <div>
-                <p className="font-semibold text-slate-800">{p.title}</p>
+                <a href={p.url} className="font-semibold text-slate-800 hover:text-orange-700" target="_blank" rel="noreferrer">
+                  {p.title}
+                </a>
                 <p className="text-xs text-slate-500">{p.category}</p>
               </div>
               <div className="text-right">

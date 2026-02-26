@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Forge Replatform POC
 
-## Getting Started
+POC frontend for replacing Crystal Commerce storefront UX.
 
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build checks
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run lint
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Shopify integration layer
 
-## Learn More
+The homepage now supports pulling featured products from Shopify Storefront API.
 
-To learn more about Next.js, take a look at the following resources:
+Create `.env.local` from `env-template.txt`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cp env-template.txt .env.local
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Required env vars:
+- `SHOPIFY_STORE_DOMAIN` (e.g. `your-store.myshopify.com`)
+- `SHOPIFY_STOREFRONT_TOKEN` (Storefront access token)
 
-## Deploy on Vercel
+Optional:
+- `NEXT_PUBLIC_SHOPIFY_PUBLIC_DOMAIN`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If env vars are not set, the POC falls back to local mock product data.

@@ -1,0 +1,6 @@
+# Shopify Storefront API
+SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
+SHOPIFY_STOREFRONT_TOKEN=shpat_xxxxxxxxx
+
+# Optional: public domain for product links (if different from store domain)
+NEXT_PUBLIC_SHOPIFY_PUBLIC_DOMAIN=your-store.myshopify.com
