@@ -9,6 +9,8 @@ npm run dev            # local dev server
 npm run check          # lint + production build
 npm run test:e2e       # Playwright smoke test (headless)
 npm run test:e2e:headed
+npm run push:secure    # push current branch using saved GitHub token file
+npm run deploy:prod    # trigger Vercel production deployment via saved token file
 ```
 
 ## First-time browser test setup
@@ -29,6 +31,10 @@ Set these in Vercel project settings:
 
 - `DISCORD_BOT_TOKEN` (required)
 - `DISCORD_GUILD_ID` (optional, defaults to `1278178261037486181`)
+
+Secure automation expects token files on the host:
+- `/home/richanderson421/.openclaw/credentials/github_pat.txt`
+- `/home/richanderson421/.openclaw/credentials/vercel_token.txt`
 
 ## Notes
 

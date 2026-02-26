@@ -10,7 +10,9 @@
     "check": "npm run lint && npm run build",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
-    "deploy:staging": "echo 'Set VERCEL_TOKEN and run: npx vercel --prod=false --yes' && exit 1"
+    "deploy:staging": "echo 'Set VERCEL_TOKEN and run: npx vercel --prod=false --yes' && exit 1",
+    "push:secure": "bash ./scripts/push-with-token.sh",
+    "deploy:prod": "bash ./scripts/vercel-redeploy.sh"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
