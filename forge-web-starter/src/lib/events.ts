@@ -1,5 +1,16 @@
 import { formatInTimeZone } from 'date-fns-tz';
 
+export type EventCategory =
+  | 'mtg'
+  | 'pokemon'
+  | 'onepiece'
+  | 'swu'
+  | 'lorcana'
+  | 'warhammer'
+  | 'fab'
+  | 'boardgames'
+  | 'other';
+
 export type StoreEvent = {
   id: string;
   title: string;
@@ -89,3 +100,28 @@ export function formatEtDayLabel(dateKey: string): string {
   const middayUtc = new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
   return formatInTimeZone(middayUtc, TIMEZONE, 'EEEE, MMM d');
 }
+
+export function detectCategory(title: string): EventCategory {
+  const t = title.toLowerCase();
+  if (t.includes('magic') || t.includes('mtg') || t.includes('commander') || t.includes('draft')) return 'mtg';
+  if (t.includes('pok') || t.includes('pokemon')) return 'pokemon';
+  if (t.includes('one piece')) return 'onepiece';
+  if (t.includes('star wars') || t.includes('swu')) return 'swu';
+  if (t.includes('lorcana')) return 'lorcana';
+  if (t.includes('warhammer') || t.includes('40k')) return 'warhammer';
+  if (t.includes('flesh') || t.includes('armory') || t.includes('fab')) return 'fab';
+  if (t.includes('board game') || t.includes('open play')) return 'boardgames';
+  return 'other';
+}
+
+export const categoryLabel: Record<EventCategory, string> = {
+  mtg: 'MTG',
+  pokemon: 'Pokémon',
+  onepiece: 'One Piece',
+  swu: 'Star Wars Unlimited',
+  lorcana: 'Lorcana',
+  warhammer: 'Warhammer',
+  fab: 'Flesh and Blood',
+  boardgames: 'Board & Open Play',
+  other: 'Other',
+};
