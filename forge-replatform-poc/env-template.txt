@@ -1,6 +1,12 @@
-# Shopify Storefront API
+# Shopify app OAuth (new model)
 SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
-SHOPIFY_STOREFRONT_TOKEN=shpat_xxxxxxxxx
+SHOPIFY_API_KEY=your_app_client_id
+SHOPIFY_API_SECRET=your_app_client_secret
+SHOPIFY_APP_URL=https://forge-replatform-poc.vercel.app
+SHOPIFY_SCOPES=read_products
 
-# Optional: public domain for product links (if different from store domain)
+# Set after OAuth callback returns token
+SHOPIFY_OFFLINE_ACCESS_TOKEN=shpat_xxxxxxxxx
+
+# Optional: public domain for product links
 NEXT_PUBLIC_SHOPIFY_PUBLIC_DOMAIN=your-store.myshopify.com

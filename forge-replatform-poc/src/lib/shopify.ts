@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { GraphQLClient, gql } from 'graphql-request';
 
 type ShopifyProductNode = {
@@ -5,7 +6,7 @@ type ShopifyProductNode = {
   title: string;
   handle: string;
   featuredImage?: { url: string; altText?: string | null } | null;
-  priceRange: { minVariantPrice: { amount: string; currencyCode: string } };
+  priceRangeV2: { minVariantPrice: { amount: string; currencyCode: string } };
 };
 
 export type ShopifyProductCard = {
@@ -18,21 +19,29 @@ export type ShopifyProductCard = {
   currencyCode: string;
 };
 
-function getClient() {
-  const domain = process.env.SHOPIFY_STORE_DOMAIN;
-  const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
+export function getShopDomain() {
+  return process.env.SHOPIFY_STORE_DOMAIN || '';
+}
 
+export function getShopifyProductUrl(handle: string) {
+  const publicDomain = process.env.NEXT_PUBLIC_SHOPIFY_PUBLIC_DOMAIN || getShopDomain();
+  return publicDomain ? `https://${publicDomain}/products/${handle}` : '#';
+}
+
+function getAdminClient() {
+  const domain = getShopDomain();
+  const token = process.env.SHOPIFY_OFFLINE_ACCESS_TOKEN;
   if (!domain || !token) return null;
 
-  return new GraphQLClient(`https://${domain}/api/2025-01/graphql.json`, {
+  return new GraphQLClient(`https://${domain}/admin/api/2025-01/graphql.json`, {
     headers: {
-      'X-Shopify-Storefront-Access-Token': token,
+      'X-Shopify-Access-Token': token,
       'Content-Type': 'application/json',
     },
   });
 }
 
-const PRODUCTS_QUERY = gql`
+const ADMIN_PRODUCTS_QUERY = gql`
   query FeaturedProducts($first: Int!) {
     products(first: $first, sortKey: UPDATED_AT, reverse: true) {
       nodes {
@@ -43,7 +52,7 @@ const PRODUCTS_QUERY = gql`
           url
           altText
         }
-        priceRange {
+        priceRangeV2 {
           minVariantPrice {
             amount
             currencyCode
@@ -55,11 +64,11 @@ const PRODUCTS_QUERY = gql`
 `;
 
 export async function getShopifyFeaturedProducts(first = 6): Promise<ShopifyProductCard[]> {
-  const client = getClient();
+  const client = getAdminClient();
   if (!client) return [];
 
   try {
-    const data = await client.request<{ products: { nodes: ShopifyProductNode[] } }>(PRODUCTS_QUERY, { first });
+    const data = await client.request<{ products: { nodes: ShopifyProductNode[] } }>(ADMIN_PRODUCTS_QUERY, { first });
 
     return data.products.nodes.map((p) => ({
       id: p.id,
@@ -67,15 +76,52 @@ export async function getShopifyFeaturedProducts(first = 6): Promise<ShopifyProd
       handle: p.handle,
       imageUrl: p.featuredImage?.url,
       imageAlt: p.featuredImage?.altText || undefined,
-      price: Number(p.priceRange.minVariantPrice.amount).toFixed(2),
-      currencyCode: p.priceRange.minVariantPrice.currencyCode,
+      price: Number(p.priceRangeV2.minVariantPrice.amount).toFixed(2),
+      currencyCode: p.priceRangeV2.minVariantPrice.currencyCode,
     }));
   } catch {
     return [];
   }
 }
 
-export function getShopifyProductUrl(handle: string) {
-  const publicDomain = process.env.NEXT_PUBLIC_SHOPIFY_PUBLIC_DOMAIN || process.env.SHOPIFY_STORE_DOMAIN;
-  return publicDomain ? `https://${publicDomain}/products/${handle}` : '#';
+export function verifyShopifyHmac(params: URLSearchParams, secret: string) {
+  const hmac = params.get('hmac') || '';
+  const sorted = [...params.entries()]
+    .filter(([k]) => k !== 'hmac' && k !== 'signature')
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([k, v]) => `${k}=${v}`)
+    .join('&');
+
+  const digest = crypto.createHmac('sha256', secret).update(sorted).digest('hex');
+  return crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(hmac));
+}
+
+export function buildOAuthRedirect(shop: string, state: string) {
+  const apiKey = process.env.SHOPIFY_API_KEY;
+  const appUrl = process.env.SHOPIFY_APP_URL;
+  const scopes = process.env.SHOPIFY_SCOPES || 'read_products';
+
+  if (!apiKey || !appUrl) throw new Error('Missing SHOPIFY_API_KEY or SHOPIFY_APP_URL');
+
+  const redirectUri = `${appUrl}/api/shopify/auth/callback`;
+  return `https://${shop}/admin/oauth/authorize?client_id=${encodeURIComponent(apiKey)}&scope=${encodeURIComponent(
+    scopes,
+  )}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${encodeURIComponent(state)}&grant_options[]=per-user`;
+}
+
+export async function exchangeCodeForToken(shop: string, code: string) {
+  const apiKey = process.env.SHOPIFY_API_KEY;
+  const apiSecret = process.env.SHOPIFY_API_SECRET;
+  if (!apiKey || !apiSecret) throw new Error('Missing SHOPIFY_API_KEY or SHOPIFY_API_SECRET');
+
+  const resp = await fetch(`https://${shop}/admin/oauth/access_token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ client_id: apiKey, client_secret: apiSecret, code }),
+  });
+
+  if (!resp.ok) throw new Error(`OAuth token exchange failed (${resp.status})`);
+
+  const json = (await resp.json()) as { access_token: string; scope: string };
+  return json;
 }
