@@ -1,9 +1,19 @@
+export type GameCategory = 'MTG' | 'One Piece' | 'Pokemon' | 'SWU' | 'Riftbound' | 'Lorcana';
+
 export type EventItem = {
   id: string;
   title: string;
   day: string;
   time: string;
-  category: 'MTG' | 'One Piece' | 'Pokemon' | 'SWU' | 'Riftbound' | 'Lorcana';
+  category: GameCategory;
+};
+
+export type ProductItem = {
+  id: string;
+  title: string;
+  price: string;
+  badge: 'Preorder' | 'New In Stock';
+  category: GameCategory;
 };
 
 export const weekEvents: EventItem[] = [
@@ -15,8 +25,13 @@ export const weekEvents: EventItem[] = [
   { id: '6', title: 'Pokemon Weekly Meetup', day: 'Tuesday', time: '5:30 PM', category: 'Pokemon' },
 ];
 
-export const heroBullets = [
-  'Mobile-first event discovery',
-  'Faster customer path to shop + events',
-  'Community-first onboarding',
+export const featuredProducts: ProductItem[] = [
+  { id: 'p1', title: 'TMNT Collector Booster Box (12 Packs)', price: '$379.99', badge: 'Preorder', category: 'MTG' },
+  { id: 'p2', title: 'Riftbound Nexus Bundle', price: '$61.99', badge: 'New In Stock', category: 'Riftbound' },
+  { id: 'p3', title: 'One Piece Sealed Product Drop', price: '$119.99', badge: 'New In Stock', category: 'One Piece' },
+  { id: 'p4', title: 'SWU Weekly Spotlight Product', price: '$39.99', badge: 'Preorder', category: 'SWU' },
+  { id: 'p5', title: 'Pokemon Sealed Restock Bundle', price: '$84.99', badge: 'New In Stock', category: 'Pokemon' },
+  { id: 'p6', title: 'Lorcana Weekly Featured Item', price: '$49.99', badge: 'Preorder', category: 'Lorcana' },
 ];
+
+export const gameCategories: GameCategory[] = ['MTG', 'One Piece', 'Pokemon', 'SWU', 'Riftbound', 'Lorcana'];
