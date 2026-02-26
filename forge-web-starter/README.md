@@ -1,6 +1,6 @@
 # Forge Web Starter
 
-Next.js + TypeScript starter configured for agent-driven build/test loops.
+Customer-facing Forge event app (Discord scheduled events) + agent-driven build/test loops.
 
 ## Commands
 
@@ -23,7 +23,15 @@ npx playwright install chromium
 
 `npm run deploy:staging` is intentionally a guarded placeholder. Once Vercel credentials are set, replace with your real deploy command.
 
+## Environment variables
+
+Set these in Vercel project settings:
+
+- `DISCORD_BOT_TOKEN` (required)
+- `DISCORD_GUILD_ID` (optional, defaults to `1278178261037486181`)
+
 ## Notes
 
 - Playwright config auto-starts the app on `http://127.0.0.1:3000`.
-- Smoke test validates homepage load/title/content.
+- Smoke test validates homepage shell renders.
+- Data refresh is cached for 5 minutes.
