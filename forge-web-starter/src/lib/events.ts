@@ -2,6 +2,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 
 export type EventCategory =
   | 'mtg'
+  | 'riftbound'
   | 'pokemon'
   | 'onepiece'
   | 'swu'
@@ -103,7 +104,16 @@ export function formatEtDayLabel(dateKey: string): string {
 
 export function detectCategory(title: string): EventCategory {
   const t = title.toLowerCase();
-  if (t.includes('magic') || t.includes('mtg') || t.includes('commander') || t.includes('draft')) return 'mtg';
+  if (t.includes('nexus night') || t.includes('riftbound')) return 'riftbound';
+  if (
+    t.includes('magic') ||
+    t.includes('mtg') ||
+    t.includes('commander') ||
+    t.includes('draft') ||
+    t.includes('teenage mutant ninja turtles') ||
+    t.includes('tmnt')
+  )
+    return 'mtg';
   if (t.includes('pok') || t.includes('pokemon')) return 'pokemon';
   if (t.includes('one piece')) return 'onepiece';
   if (t.includes('star wars') || t.includes('swu')) return 'swu';
@@ -116,6 +126,7 @@ export function detectCategory(title: string): EventCategory {
 
 export const categoryLabel: Record<EventCategory, string> = {
   mtg: 'MTG',
+  riftbound: 'Riftbound',
   pokemon: 'Pokémon',
   onepiece: 'One Piece',
   swu: 'Star Wars Unlimited',

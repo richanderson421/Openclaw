@@ -14,6 +14,7 @@ export const revalidate = 300;
 
 const filterOrder: EventCategory[] = [
   'mtg',
+  'riftbound',
   'pokemon',
   'onepiece',
   'swu',
@@ -26,6 +27,7 @@ const filterOrder: EventCategory[] = [
 
 const chipColor: Record<EventCategory, string> = {
   mtg: 'bg-rose-100 text-rose-700',
+  riftbound: 'bg-violet-100 text-violet-700',
   pokemon: 'bg-yellow-100 text-yellow-800',
   onepiece: 'bg-sky-100 text-sky-700',
   swu: 'bg-indigo-100 text-indigo-700',
