@@ -45,21 +45,21 @@ export function HomeExperience() {
 
       <div className="rounded-3xl bg-slate-900 p-8 text-white shadow-2xl sm:p-10">
         <p className="text-xs uppercase tracking-[0.2em] text-slate-300">Forge Replatform Preview</p>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-5xl">New & Preorder Products First</h1>
+        <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-5xl">Find your next game night at The Forge</h1>
         <p className="mt-4 max-w-2xl text-slate-300">
-          Lead with sales, keep events easy to find. This model prioritizes new arrivals and preorders while still surfacing
-          upcoming play opportunities.
+          Built to help customers decide to visit in person: what&apos;s happening this week, what&apos;s new in-store, and where to start
+          if you&apos;re brand new.
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
-          <Link href="/categories/mtg" className="forge-primary-btn">Shop Featured Products</Link>
-          <Link href="/events" className="forge-secondary-btn">View Events</Link>
+          <Link href="/events" className="forge-primary-btn">See This Week&apos;s Events</Link>
+          <Link href="/new-player" className="forge-secondary-btn">New Player Guide</Link>
         </div>
       </div>
 
       <section className="forge-card mt-6 p-6">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Featured Right Now</h2>
-          <Link href="/categories/mtg" className="text-sm font-semibold text-orange-600 hover:text-orange-700">View catalog →</Link>
+          <h2 className="text-xl font-semibold">New In-Store Highlights</h2>
+          <Link href="/categories/mtg" className="text-sm font-semibold text-orange-600 hover:text-orange-700">Browse game categories →</Link>
         </div>
         <ul className="space-y-2">
           {filteredProducts.map((p) => (
